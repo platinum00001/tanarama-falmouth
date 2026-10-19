@@ -1,0 +1,46 @@
+# Decap CMS (MIT) config. Backend: GitHub with an OAuth proxy (works on Vercel/any host).
+# If hosting on Netlify instead, swap backend to: name: git-gateway
+backend:
+  name: github
+  repo: platinum00001/tanarama-falmouth
+  branch: main
+  base_url: https://REPLACE_WITH_OAUTH_PROXY_URL   # see README "Editor logins"
+publish_mode: simple
+media_folder: images
+public_folder: /images
+collections:
+  - name: site
+    label: Site content
+    files:
+      - name: home
+        label: Main page text
+        file: content/home.json
+        fields:
+          - { name: headline, label: Headline, widget: string }
+          - { name: subheadline, label: Sub-headline, widget: string }
+          - { name: eyebrow, label: Small line above headline, widget: string }
+      - name: hours
+        label: Hours
+        file: content/hours.json
+        fields:
+          - { name: hours_monday, label: Monday, widget: string }
+          - { name: hours_tue_fri, label: Tuesday–Friday, widget: string }
+          - { name: hours_saturday, label: Saturday, widget: string }
+          - { name: hours_sunday, label: Sunday, widget: string }
+          - { name: hours_note, label: Note under hours, widget: text }
+      - name: services
+        label: Services (menu) descriptions
+        file: content/services.json
+        fields:
+          - { name: service_tanning, label: Tanning Services, widget: text }
+          - { name: service_spray, label: Spray Tanning, widget: text }
+          - { name: service_redlight, label: Red Light Therapy, widget: text }
+          - { name: service_spa, label: Massage & Facials, widget: text }
+      - name: contact
+        label: Contact info
+        file: content/contact.json
+        fields:
+          - { name: phone, label: Phone (as displayed), widget: string }
+          - { name: phone_link, label: Phone for tap-to-call (+1508...), widget: string }
+          - { name: email, label: Email, widget: string }
+          - { name: street, label: Street address, widget: string }
