@@ -37,11 +37,49 @@ collections:
         label: Hours
         file: content/hours.json
         fields:
-          - { name: hours_monday, label: Monday, widget: string }
-          - { name: hours_tue_fri, label: Tuesday–Friday, widget: string }
+          - { name: hours_mon_fri, label: Monday–Friday, widget: string }
           - { name: hours_saturday, label: Saturday, widget: string }
           - { name: hours_sunday, label: Sunday, widget: string }
           - { name: hours_note, label: Note under hours, widget: text }
+      - name: pricing
+        label: Pricing
+        file: content/pricing.json
+        description: Prices shown in the Pricing section on the Home and Services pages.
+        fields:
+          - { name: pricing_title, label: Heading, widget: string }
+          - { name: pricing_intro, label: Line under the heading, widget: text, required: false }
+          - name: pricing_groups
+            label: Price groups
+            widget: list
+            summary: "{{fields.name}}"
+            fields:
+              - { name: name, label: "Group name (e.g. Tanning – Level 4)", widget: string }
+              - name: items
+                label: Prices
+                widget: list
+                summary: "{{fields.label}}: {{fields.price}}"
+                fields:
+                  - { name: label, label: "What (e.g. 6 visits)", widget: string }
+                  - { name: price, label: "Price (e.g. $85)", widget: string }
+              - { name: note, label: Small note (optional), widget: string, required: false }
+          - { name: pricing_note, label: Small print under the prices, widget: text, required: false }
+      - name: extras
+        label: Private room & lotions
+        file: content/extras.json
+        description: The "private room" and "Lotions" sections on the Home and Services pages.
+        fields:
+          - { name: room_eyebrow, label: Room – small line above heading, widget: string }
+          - { name: room_title, label: Room – heading, widget: string }
+          - { name: room_text, label: Room – description, widget: text }
+          - { name: room_photo, label: Room – photo, widget: image, choose_url: false }
+          - { name: room_photo_alt, label: Room – photo description (for screen readers), widget: string }
+          - { name: lotions_eyebrow, label: Lotions – small line above heading, widget: string }
+          - { name: lotions_title, label: Lotions – heading, widget: string }
+          - { name: lotions_intro, label: Lotions – lead-in words, widget: string }
+          - { name: lotions_list, label: Lotions carried in store, widget: list, field: { name: name, label: Lotion, widget: string } }
+          - { name: lotions_note, label: Lotions – note, widget: string }
+          - { name: lotions_photo, label: Lotions – photo, widget: image, choose_url: false }
+          - { name: lotions_photo_alt, label: Lotions – photo description, widget: string }
       - name: services
         label: Services (menu) descriptions
         file: content/services.json

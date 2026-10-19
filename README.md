@@ -20,7 +20,9 @@ Anyone with write access to this repo can edit right on GitHub:
 1. Open the repo on github.com and go to the `content/` folder.
 2. Click the file you want, then the pencil icon (**Edit this file**):
    - `home.json` – main headline, sub-headline, small line above the headline
-   - `hours.json` – opening hours and the note under them
+   - `hours.json` – opening hours (Mon–Fri, Sat, Sun) and the note under them
+   - `pricing.json` – the price list (Pricing section on Home and Services)
+   - `extras.json` – the private-room and Lotions sections (text, lotion names, photos)
    - `services.json` – the four service descriptions
    - `contact.json` – phone, tap-to-call number, email, street address
    - `photos.json` – which photo file is used for each photo spot (see below)

@@ -15,6 +15,22 @@ const jsEsc = s => s.replace(/\\/g, '\\\\').replace(/`/g, '\\`').replace(/\$\{/g
 const swap = (txt, from, to) => from === to ? txt : txt.split(from).join(to);
 const reEsc = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
+// ---- extra sections (pricing, private room, lotions) rendered from content/pricing.json + content/extras.json ----
+// The page files hold a "__TANORAMA_EXTRAS__" marker (Home and Services pages); it is replaced with this HTML.
+const imgSrc = v => { v = String(v || '').trim(); return /^https?:\/\//i.test(v) ? encodeURI(decodeURI(v)) : encodeURI(decodeURI('/' + v.replace(/^\/+/, ''))); };
+function renderExtras(c) {
+  const e = s => esc(String(s ?? ''));
+  const eyebrow = s => `<p class="text-xs tracking-[0.22em] text-sea uppercase">${e(s)}</p>`;
+  const groups = (c.pricing_groups || []).map(g => `<div class="rounded-xl bg-cream p-6 ring-1 ring-line"><h3 class="font-display text-2xl text-ink">${e(g.name)}</h3><ul class="mt-4 text-sm">${(g.items || []).map(i => `<li class="flex justify-between gap-4 border-b border-line py-2"><span class="text-ink">${e(i.label)}</span><span class="tabular-nums text-muted">${e(i.price)}</span></li>`).join('')}</ul>${g.note ? `<p class="mt-4 text-sm text-sea">${e(g.note)}</p>` : ''}</div>`).join('');
+  const lot = (c.lotions_list || []).filter(Boolean).map(e);
+  const lotText = lot.length ? `${e(c.lotions_intro || 'In-store lotions include')} ${lot.length > 1 ? lot.slice(0, -1).join(', ') + ', and ' + lot[lot.length - 1] : lot[0]}.` : '';
+  const photo = (src, alt) => src ? `<img src="${imgSrc(src)}" alt="${e(alt)}" loading="lazy" decoding="async" width="1600" height="2133" class="w-full rounded-xl object-cover" style="aspect-ratio:4/5"/>` : '';
+  return `<section id="pricing" class="bg-paper/60 py-20 scroll-mt-28"><div class="mx-auto max-w-6xl px-4 sm:px-6">${eyebrow('Pricing')}<h2 class="font-display mt-2 text-4xl text-ink">${e(c.pricing_title)}</h2>${c.pricing_intro ? `<p class="mt-4 max-w-2xl text-sm leading-relaxed text-muted">${e(c.pricing_intro)}</p>` : ''}<div class="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">${groups}</div>${c.pricing_note ? `<p class="mt-6 text-xs text-muted">${e(c.pricing_note)}</p>` : ''}</div></section>`
+    + `<section id="private-room" class="mx-auto grid max-w-6xl items-center gap-12 px-4 py-20 sm:px-6 lg:grid-cols-2 scroll-mt-28">${photo(c.room_photo, c.room_photo_alt)}<div>${eyebrow(c.room_eyebrow)}<h2 class="font-display mt-3 text-4xl text-ink">${e(c.room_title)}</h2><p class="mt-5 leading-relaxed text-muted">${e(c.room_text)}</p></div></section>`
+    + `<section id="lotions" class="bg-cream py-20 scroll-mt-28"><div class="mx-auto grid max-w-6xl items-center gap-12 px-4 sm:px-6 lg:grid-cols-2"><div>${eyebrow(c.lotions_eyebrow)}<h2 class="font-display mt-3 text-4xl text-ink">${e(c.lotions_title)}</h2>${lotText ? `<p class="mt-5 leading-relaxed text-muted">${lotText}</p>` : ''}${c.lotions_note ? `<p class="mt-4 text-sm text-sea">${e(c.lotions_note)}</p>` : ''}</div>${photo(c.lotions_photo, c.lotions_photo_alt)}</div></section>`;
+}
+const extrasHtml = renderExtras(current);
+
 // ---- photos: original path -> new path (all swapped in one pass so swaps never chain) ----
 const normPhoto = v => {
   v = String(v || '').trim(); if (!v) return null;
@@ -64,6 +80,7 @@ function copy(src, dst) {
       let t = fs.readFileSync(s, 'utf8'); const isJs = e.name.endsWith('.js');
       const kind = isJs ? 'js' : e.name.endsWith('.html') ? 'html' : 'manifest';
       if (kind === 'html') t = fixCfEmail(t);
+      t = t.split('__TANORAMA_EXTRAS__').join(isJs ? jsEsc(extrasHtml) : extrasHtml);
       t = swapPhotos(t);
       for (const k of Object.keys(baseline)) {
         if (k.startsWith('photo_')) continue;

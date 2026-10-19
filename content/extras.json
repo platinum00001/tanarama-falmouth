@@ -1,0 +1,28 @@
+{
+  "room_eyebrow": "The private room",
+  "room_title": "Your own cozy room for every session.",
+  "room_text": "Tan in a private room with a SunVision Pro 30/3E tanning bed, a cozy electric fireplace, warm lamp lighting, a fan to keep you cool, and a comfy chair to get ready in.",
+  "room_photo": "/images/private-room.jpg",
+  "room_photo_alt": "Private tanning room at Tanorama Falmouth with a SunVision Pro 30/3E tanning bed, an electric fireplace, a lamp, a fan, and an armchair",
+  "lotions_eyebrow": "Lotions",
+  "lotions_title": "The right lotion for your level.",
+  "lotions_intro": "In-store lotions include",
+  "lotions_list": [
+    "Australian Gold",
+    "Beach You To It",
+    "Island Time",
+    "Rush",
+    "Perfect 10",
+    "Cute",
+    "Old School",
+    "Hopeless Romantic",
+    "Pretty Pink & Perfect",
+    "Orange Creamsicle",
+    "Emerald Bay",
+    "CT Seven",
+    "858, 949, and 310 Cali packets"
+  ],
+  "lotions_note": "Ask us about lotion packets and bottles in store.",
+  "lotions_photo": "/images/lotions.jpg",
+  "lotions_photo_alt": "Lotion packet rack at Tanorama Falmouth"
+}
