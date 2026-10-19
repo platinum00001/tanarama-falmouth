@@ -1,11 +1,25 @@
-# Decap CMS (MIT) config. Backend: GitHub with an OAuth proxy (works on Vercel/any host).
-# If hosting on Netlify instead, swap backend to: name: git-gateway
+# Decap CMS (MIT) config — the friendly edit page at /admin.
+# Backend: GitHub. Editors log in with their GitHub account (needs write access to the repo).
+# The login goes through a small OAuth helper on Vercel (separate project "tanarama-oauth",
+# deployed at https://tanarama-oauth.vercel.app). It only works once its OAUTH_CLIENT_ID and
+# OAUTH_CLIENT_SECRET env vars are set from a GitHub OAuth App — see README "Editor logins".
+# If the helper ever moves, change base_url (no trailing slash).
 backend:
   name: github
   repo: platinum00001/tanarama-falmouth
   branch: main
-  base_url: https://REPLACE_WITH_OAUTH_PROXY_URL   # see README "Editor logins"
-publish_mode: simple
+  base_url: https://tanarama-oauth.vercel.app   # the OAuth helper's address (Vercel)
+  auth_endpoint: api/auth                                # helper route that starts the GitHub login
+  commit_messages:
+    update: 'Edit {{collection}} “{{slug}}” via the edit page'
+    uploadMedia: 'Upload photo “{{path}}” via the edit page'
+    deleteMedia: 'Delete photo “{{path}}” via the edit page'
+publish_mode: simple            # Publish = live after the automatic rebuild (about 1–2 minutes)
+site_url: https://platinum00001.github.io/tanarama-falmouth/
+display_url: https://platinum00001.github.io/tanarama-falmouth/
+logo_url: https://platinum00001.github.io/tanarama-falmouth/images/logo.png
+# Photos uploaded on the edit page are saved in the repo's images/ folder (next to the current photos,
+# so the current photos show as previews and can be re-picked from the media library).
 media_folder: images
 public_folder: /images
 collections:
@@ -44,3 +58,25 @@ collections:
           - { name: phone_link, label: Phone for tap-to-call (+1508...), widget: string }
           - { name: email, label: Email, widget: string }
           - { name: street, label: Street address, widget: string }
+      - name: photos
+        label: Photos
+        file: content/photos.json
+        description: >-
+          Click a photo, then "Choose different image" to upload a new one from your computer or phone
+          (JPG or PNG; landscape, at least 1600 px wide, under 2 MB works best). Each photo below is replaced
+          everywhere it is shown on the site. Please don't delete the original photos from the media library.
+        fields:
+          - { name: photo_hero, label: "Main banner photo", widget: image, choose_url: false, hint: "Shown on: Big photo at the top of the Home page. Also used on the Spray Tanning card and the Services page." }
+          - { name: photo_logo, label: "Logo", widget: image, choose_url: false, hint: "Shown on: Tanorama logo in the top menu, the footer, and the Home banner. Use a PNG with a see-through background." }
+          - { name: photo_beds, label: "Tanning beds (row)", widget: image, choose_url: false, hint: "Shown on: Tanning Services card on Home and Services; banner on About, Services, and Red Light." }
+          - { name: photo_bed, label: "Single tanning bed", widget: image, choose_url: false, hint: "Shown on: Red Light Therapy card on Home; Red Light and Services pages." }
+          - { name: photo_standup, label: "Stand-up booth", widget: image, choose_url: false, hint: "Shown on: Services and Testimonials pages." }
+          - { name: photo_booth, label: "Booth photo (About page)", widget: image, choose_url: false, hint: "Shown on: About page gallery." }
+          - { name: photo_beds_wide, label: "Wide salon photo", widget: image, choose_url: false, hint: "Shown on: Top banner on the Contact / Book page; Testimonials page." }
+          - { name: photo_mural, label: "Tropical mural", widget: image, choose_url: false, hint: "Shown on: Home page and the Testimonials banner." }
+          - { name: photo_scott, label: "Owner photo (Scott)", widget: image, choose_url: false, hint: "Shown on: Owner section on Home and About, plus Google search info." }
+          - { name: photo_boutique_room, label: "Boutique room", widget: image, choose_url: false, hint: "Shown on: Massage & Facials card on Home; About, Boutique, and Services pages." }
+          - { name: photo_boutique_clothes, label: "Boutique clothes", widget: image, choose_url: false, hint: "Shown on: Boutique section on Home; Boutique page banner and gallery." }
+          - { name: photo_boutique_rack, label: "Boutique clothing rack", widget: image, choose_url: false, hint: "Shown on: Boutique page gallery." }
+          - { name: photo_boutique_hats, label: "Boutique hats", widget: image, choose_url: false, hint: "Shown on: Boutique page gallery." }
+          - { name: photo_boutique_jewelry, label: "Boutique jewelry", widget: image, choose_url: false, hint: "Shown on: Boutique and Services pages." }
